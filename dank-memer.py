@@ -412,6 +412,9 @@ def toggle_stream():
 title_label = ctk.CTkLabel(app, text="Dank Memer Bot", font=ctk.CTkFont(size=20, weight="bold"))
 title_label.grid(row=0, column=1, padx=0, pady=10)
 
+title_label = ctk.CTkLabel(app, text="Press F8 to toggle", font=ctk.CTkFont(size=13))
+title_label.grid(row=0, column=2, padx=0, pady=10)
+
 
 
 start_btn = ctk.CTkButton(app, text="Start", command=Toggle)
@@ -457,6 +460,9 @@ def set_checks():
         topwin_check.deselect()
 
 set_checks()
+
+
+
 
 
 app.mainloop()
