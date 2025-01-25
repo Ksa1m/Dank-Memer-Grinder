@@ -1,5 +1,5 @@
 # DankMemer Bot
-A bot for getting money automatically in DankMemer Discord Bot written in Python
+A bot for getting money automatically in DankMemer Discord Bot
 
 
 ### Automatically types these commands:
