@@ -9,4 +9,4 @@ A bot for getting money automatically in DankMemer Discord Bot written in Python
 - beg
 - hunt
 
-Currently only works with beg and hunt.
+Currently not working
