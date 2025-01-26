@@ -87,142 +87,142 @@ def Toggle():
     running = not running
     start_btn.configure(text="Start")
 
-#     if running:
-#         timer_start()
-#         start_thread()
-#     else:
-#         reset_text()
+    if running:
+        timer_start()
+        start_thread()
+    else:
+        reset_text()
 
-# def start():
-#     start_btn.configure(text="Running")
-#     while running:
-#         if timer % postmemes_delay == 0:
-#             postmemes()
+def start():
+    start_btn.configure(text="Running")
+    while running:
+        if timer % postmemes_delay == 0:
+            postmemes()
 
-#         if timer % beg_delay == 0:
-#             beg()
+        if timer % beg_delay == 0:
+            beg()
 
-#         if timer % hunt_delay == 0:
-#             hunt()
+        if timer % hunt_delay == 0:
+            hunt()
 
-#         if timer % crime_delay == 0:
-#             crime()
+        if timer % crime_delay == 0:
+            crime()
 
-#         if timer % search_delay == 0:
-#             search()
+        if timer % search_delay == 0:
+            search()
 
-#         if timer % stream_delay == 0:
-#             search()
+        if timer % stream_delay == 0:
+            search()
         
-#         t.sleep(1)
+        t.sleep(1)
 
 
 
 
-# running_text = "Running"
+running_text = "Running"
 
 
-# def seconds_to_minutes(seconds):
-#     minutes = seconds // 60
-#     remaining_seconds = seconds % 60
-#     return f"{minutes}m {remaining_seconds}s"
+def seconds_to_minutes(seconds):
+    minutes = seconds // 60
+    remaining_seconds = seconds % 60
+    return f"{minutes}m {remaining_seconds}s"
 
 
-# def update():
-#     global running, running_text, timer
+def update():
+    global running, running_text, timer
     
-#     if running:
-#         # Running
-#         if "...." in running_text:
-#             running_text = "Running"
+    if running:
+        # Running
+        if "...." in running_text:
+            running_text = "Running"
 
-#         start_btn.configure(text=running_text)
+        start_btn.configure(text=running_text)
 
-#         running_text += "."
+        running_text += "."
 
 
-#         # Begging
+        # Begging
 
-#         remainder = timer % beg_delay
-#         if remainder == 0:
-#             begging_left = beg_delay
-#         else:
-#             begging_left = beg_delay - remainder
+        remainder = timer % beg_delay
+        if remainder == 0:
+            begging_left = beg_delay
+        else:
+            begging_left = beg_delay - remainder
         
-#         begging_text = f"Beg: {begging_left}"
+        begging_text = f"Beg: {begging_left}"
         
-#         beg_btn.configure(text=begging_text)
+        beg_btn.configure(text=begging_text)
 
-#         # Hunting
+        # Hunting
 
-#         remainder = timer % hunt_delay
-#         if remainder == 0:
-#             hunting_left = hunt_delay
-#         else:
-#             hunting_left = hunt_delay - remainder
+        remainder = timer % hunt_delay
+        if remainder == 0:
+            hunting_left = hunt_delay
+        else:
+            hunting_left = hunt_delay - remainder
         
-#         hunting_text = f"Hunt: {hunting_left}"
+        hunting_text = f"Hunt: {hunting_left}"
         
-#         hunt_btn.configure(text=hunting_text)
+        hunt_btn.configure(text=hunting_text)
 
-#         # Crime
+        # Crime
 
-#         remainder = timer % crime_delay
-#         if remainder == 0:
-#             crime_left = crime_delay
-#         else:
-#             crime_left = crime_delay - remainder
+        remainder = timer % crime_delay
+        if remainder == 0:
+            crime_left = crime_delay
+        else:
+            crime_left = crime_delay - remainder
         
-#         crime_text = f"Crime: {crime_left}"
+        crime_text = f"Crime: {crime_left}"
         
-#         crime_btn.configure(text=crime_text)
+        crime_btn.configure(text=crime_text)
 
-#         # Search
-#         if not config.safe_mode:
-#             remainder = timer % search_delay
-#             if remainder == 0:
-#                 search_left = search_delay
-#             else:
-#                 search_left = search_delay - remainder
+        # Search
+        if not config.safe_mode:
+            remainder = timer % search_delay
+            if remainder == 0:
+                search_left = search_delay
+            else:
+                search_left = search_delay - remainder
             
-#             search_text = f"Search: {search_left}"
+            search_text = f"Search: {search_left}"
             
-#             search_btn.configure(text=search_text)
+            search_btn.configure(text=search_text)
 
-#         # Postmemes
+        # Postmemes
 
-#         remainder = timer % postmemes_delay
-#         if remainder == 0:
-#             postmemes_left = postmemes_delay
-#         else:
-#             postmemes_left = postmemes_delay - remainder
+        remainder = timer % postmemes_delay
+        if remainder == 0:
+            postmemes_left = postmemes_delay
+        else:
+            postmemes_left = postmemes_delay - remainder
         
-#         postmemes_text = f"Postmemes: {postmemes_left}"
+        postmemes_text = f"Postmemes: {postmemes_left}"
         
-#         postmemes_btn.configure(text=postmemes_text)
+        postmemes_btn.configure(text=postmemes_text)
 
-#         # Stream
+        # Stream
         
-#         if config.stream_unlocked:
-#             remainder = timer % stream_delay
-#             if remainder == 0:
-#                 stream_left = stream_delay
-#             else:
-#                 stream_left = stream_delay - remainder
+        if config.stream_unlocked:
+            remainder = timer % stream_delay
+            if remainder == 0:
+                stream_left = stream_delay
+            else:
+                stream_left = stream_delay - remainder
             
-#             stream_left_last = seconds_to_minutes(stream_left)
-#             stream_text = f"Stream: {stream_left_last}"
+            stream_left_last = seconds_to_minutes(stream_left)
+            stream_text = f"Stream: {stream_left_last}"
             
-#             stream_btn.configure(text=stream_text)
+            stream_btn.configure(text=stream_text)
 
 
-# def reset_text():
-#     beg_btn.configure(text="Beg")
-#     hunt_btn.configure(text="Hunt")
-#     crime_btn.configure(text="Crime")
-#     search_btn.configure(text="Search")
-#     postmemes_btn.configure(text="Postmemes")
-#     stream_btn.configure(text="Stream")
+def reset_text():
+    beg_btn.configure(text="Beg")
+    hunt_btn.configure(text="Hunt")
+    crime_btn.configure(text="Crime")
+    search_btn.configure(text="Search")
+    postmemes_btn.configure(text="Postmemes")
+    stream_btn.configure(text="Stream")
 
 
 # region Functions
@@ -342,9 +342,9 @@ def stream():
 
 
 
-# def start_thread():
-#     bot_thread = threading.Thread(target=start, daemon=True)
-#     bot_thread.start()
+def start_thread():
+    bot_thread = threading.Thread(target=start, daemon=True)
+    bot_thread.start()
 
 
 
@@ -414,19 +414,14 @@ def set_search():
         
 
 
-app.grid_columnconfigure(0, weight=1)  # Make the main column expandable
-# app.grid_rowconfigure(0, weight=1)    # Make the main row expandable
-# app.grid_rowconfigure(1, weight=1)    # Make the main row expandable
+app.grid_columnconfigure(0, weight=1)
 
-# Main frame configuration
 main_frame = ctk.CTkFrame(app)
-main_frame.grid(row=0, column=0, padx=10, pady=10, sticky="new")  # Ensure frame stretches
+main_frame.grid(row=0, column=0, padx=10, pady=10, sticky="new")
 
-# Inside the main_frame, configure its layout as needed
 main_frame.grid_columnconfigure(0, weight=1)
 main_frame.grid_columnconfigure(1, weight=1)
 main_frame.grid_columnconfigure(2, weight=1)
-# main_frame.grid_rowconfigure(0, weight=1)  # Optional, if needed
 
 
 
@@ -435,7 +430,7 @@ main_frame.grid_columnconfigure(2, weight=1)
 
 # Example for adding widgets to the main frame
 title_label = ctk.CTkLabel(main_frame, text="Dank Memer Bot", font=ctk.CTkFont(size=20, weight="bold"))
-title_label.grid(row=0, column=0, padx=0, pady=0, columnspan=3, sticky="ew")  # Center-align label
+title_label.grid(row=0, column=0, padx=0, pady=0, columnspan=3, sticky="ew")
 
 
 
@@ -570,6 +565,7 @@ def set_time(value):
 time_sl = ctk.CTkSlider(settings_frame, width=150, from_=0.1, to=2,command=set_time)
 time_sl.grid(row=2, column=0, padx=10, pady=0)
 
+time_sl.set(config.load_time)
 
 
 app.mainloop()
