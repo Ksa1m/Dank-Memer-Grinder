@@ -2,11 +2,47 @@ import time as t
 import threading
 import random
 import importlib
+import config
+
+
+# region Install required libraries
+
+import subprocess
+import sys
+import pkg_resources
+
+def check_and_install_package(package):
+    """Check if a package is installed and install it if not."""
+    installed_packages = {pkg.key for pkg in pkg_resources.working_set}
+    if package not in installed_packages:
+        print(f"Installing {package}...")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+    else:
+        # print(f"{package} is already installed.")
+        pass
+
+def install_requirements():
+    try:
+        required_packages = ["keyboard", "pyautogui", "customtkinter"]
+        
+        for package in required_packages:
+            check_and_install_package(package)
+
+    except subprocess.CalledProcessError:
+        print("Error occurred during installation. Please check your Python and pip installation.")
+
+install_requirements()
+
+
+print("Successfully install required libraries")
+
+# endregion
 
 import pyautogui as kp
 import customtkinter as ctk
 import keyboard as kb
-import config
+
+
 
 
 
@@ -27,17 +63,21 @@ def set_config(variable, value, config_file="config.py"):
                 updated_lines.append(line)
 
         if not variable_found:
-            return f"Error: Variable '{variable}' not found in {config_file}."
+            print(f"Error: Variable '{variable}' not found in {config_file}.")
+            return
 
         with open(config_file, 'w') as file:
             file.writelines(updated_lines)
 
-        return f"Successfully set '{variable}' to {value}."
+        # print(f"Successfully set '{variable}' to {value}.")
+        return
 
     except FileNotFoundError:
-        return f"Error: Config file '{config_file}' not found."
+        print(f"Error: Config file '{config_file}' not found.")
+        return
     except Exception as e:
-        return f"Error: {e}"
+        print(f"Error: {e}")
+        return
 
 
 
@@ -47,7 +87,7 @@ def set_config(variable, value, config_file="config.py"):
 
 
 postmemes_delay = 36
-search_delay = 25
+search_delay = 30
 crime_delay = 46
 beg_delay = 42
 hunt_delay = 22
@@ -66,7 +106,7 @@ def timer_stop():
 def timer_loop():
     global timer, running
     while running:
-        # update()
+        update()
         timer += 1
         t.sleep(1)
 
@@ -166,16 +206,16 @@ def update():
         hunt_btn.configure(text=hunting_text)
 
         # Crime
-
-        remainder = timer % crime_delay
-        if remainder == 0:
-            crime_left = crime_delay
-        else:
-            crime_left = crime_delay - remainder
-        
-        crime_text = f"Crime: {crime_left}"
-        
-        crime_btn.configure(text=crime_text)
+        if not config.safe_mode:
+            remainder = timer % crime_delay
+            if remainder == 0:
+                crime_left = crime_delay
+            else:
+                crime_left = crime_delay - remainder
+            
+            crime_text = f"Crime: {crime_left}"
+            
+            crime_btn.configure(text=crime_text)
 
         # Search
         if not config.safe_mode:
@@ -241,6 +281,9 @@ def hunt():
 
 
 def crime():
+    if config.safe_mode:
+        return
+    
     kp.typewrite("/crime")
     t.sleep(config.load_time)
     kp.press('enter')
@@ -312,7 +355,7 @@ def postmemes():
     t.sleep(1)
 
     y = 990
-    x = 525
+    x = 450
     kp.leftClick(x, y)
 
     kp.moveTo(pos)
@@ -368,11 +411,6 @@ def disable_window():
 
 
 
-def toggle_window():
-    set_config("window_enabled", not config.window_enabled)
-    importlib.reload(config)
-    set_window()
-
 def set_window():
     if config.window_enabled:
         enable_window()
@@ -380,14 +418,15 @@ def set_window():
         disable_window()
 
 
+def toggle_window():
+    set_config("window_enabled", not config.window_enabled)
+    importlib.reload(config)
+    set_window()
+
+
 
 set_window()
 
-
-def toggle_stream():
-    set_config("stream_unlocked", not config.stream_unlocked)
-    importlib.reload(config)
-    set_stream()
 
 def set_stream():
     if not config.stream_unlocked:
@@ -396,17 +435,25 @@ def set_stream():
         stream_btn.configure(state="normal")
 
 
+def toggle_stream():
+    set_config("stream_unlocked", not config.stream_unlocked)
+    importlib.reload(config)
+    set_stream()
+
+
 
 def toggle_safe():
     set_config("safe_mode", not config.safe_mode)
     importlib.reload(config)
-    set_search()
+    set_safe()
 
-def set_search():
+def set_safe():
     if config.safe_mode:
         search_btn.configure(state="disabled")
+        crime_btn.configure(state="disabled")
     else:
         search_btn.configure(state="normal")
+        crime_btn.configure(state="normal")
 
 
 
@@ -448,7 +495,7 @@ def change_key():
         ehh_key = kb.read_key()
         frfr_key = str(ehh_key).capitalize()
         set_config("key", f'"{frfr_key}"')
-        # bind_key(frfr_key)
+        bind_key(frfr_key)
         key_btn.configure(text=f"Press {frfr_key} to toggle")
 
     if config.key in kb._hotkeys:
@@ -496,7 +543,7 @@ crime_btn.grid(row=1, column=2, padx=20, pady=10)
 search_btn = ctk.CTkButton(commands_frame, text="Search", command=search)
 search_btn.grid(row=2, column=0, padx=20, pady=10)
 
-set_search()
+set_safe()
 
 postmemes_btn = ctk.CTkButton(commands_frame, text="Postmemes", command=postmemes)
 postmemes_btn.grid(row=2, column=1, padx=20, pady=10)
