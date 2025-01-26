@@ -8,7 +8,7 @@ A bot for getting money automatically in DankMemer Discord Bot
 - crime
 - beg
 - hunt
-
+- stream
 
 For it to work you always have to be in the discord window.
 
