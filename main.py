@@ -3,6 +3,7 @@ import threading
 import random
 import importlib
 import config
+import os
 
 
 # region Install required libraries
@@ -45,11 +46,12 @@ import keyboard as kb
 
 
 
+path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.py") # get path to config.py
 
 
-def set_config(variable, value, config_file="config.py"):
+def set_config(variable, value):
     try:
-        with open(config_file, 'r') as file:
+        with open(path, 'r') as file:
             lines = file.readlines()
 
         updated_lines = []
@@ -63,17 +65,17 @@ def set_config(variable, value, config_file="config.py"):
                 updated_lines.append(line)
 
         if not variable_found:
-            print(f"Error: Variable '{variable}' not found in {config_file}.")
+            print(f"Error: Variable '{variable}' not found in {path}.")
             return
 
-        with open(config_file, 'w') as file:
+        with open(path, 'w') as file:
             file.writelines(updated_lines)
 
         # print(f"Successfully set '{variable}' to {value}.")
         return
 
     except FileNotFoundError:
-        print(f"Error: Config file '{config_file}' not found.")
+        print(f"Error: Config file '{path}' not found.")
         return
     except Exception as e:
         print(f"Error: {e}")
@@ -91,10 +93,11 @@ search_delay = 30
 crime_delay = 46
 beg_delay = 42
 hunt_delay = 22
-stream_delay = 1810 # Required keyboard & mouse
+stream_delay = 1810 # Requires keyboard & mouse
 
 
 timer = 352
+
 
 
 running = False
@@ -120,7 +123,7 @@ def timer_start():
 timer_start()
 
 
-
+# region Functions
 
 def Toggle():
     global running
@@ -265,7 +268,7 @@ def reset_text():
     stream_btn.configure(text="Stream")
 
 
-# region Functions
+
 
 def beg():
     kp.typewrite("/beg")
@@ -391,24 +394,70 @@ def start_thread():
 
 
 
+
 # region GUI
 
 
 app = ctk.CTk()
 app.title("Dank Memer Bot")
-app.geometry("540x340+700+100")
+app.geometry("800x400+460+100")
 
 
 
+
+
+
+
+# Sidebar Frame
+sidebar_frame = ctk.CTkFrame(app, width=150, corner_radius=0)
+sidebar_frame.grid(row=0, column=0, sticky="nsw")
+
+
+# Content Frame
+content_frame = ctk.CTkFrame(app, corner_radius=10, fg_color="transparent")
+content_frame.grid(row=0, column=1, padx=10, sticky="nsew")
+app.grid_columnconfigure(1, weight=1)
+app.grid_rowconfigure(0, weight=1)
+
+
+
+# Tab Frames for Switching
+main_tab_frame = ctk.CTkFrame(content_frame, corner_radius=10)
+settings_tab_frame = ctk.CTkFrame(content_frame, corner_radius=10)
+
+
+
+
+content_frame.grid_columnconfigure(0, weight=1)
+content_frame.grid_rowconfigure(0, weight=1)
+
+
+
+
+
+settings_tab_frame.grid_rowconfigure(0, weight=0)
+settings_tab_frame.grid_columnconfigure(0, weight=0)
+settings_tab_frame.grid_columnconfigure(1, weight=1)
+settings_tab_frame.grid_columnconfigure(2, weight=1)
+
+
+
+
+
+
+
+
+
+
+
+
+# region GUI Functions
 
 
 def enable_window():
     app.attributes("-topmost", True)
 def disable_window():
     app.attributes("-topmost", False)
-
-
-
 
 
 def set_window():
@@ -424,8 +473,9 @@ def toggle_window():
     set_window()
 
 
-
 set_window()
+
+
 
 
 def set_stream():
@@ -442,10 +492,12 @@ def toggle_stream():
 
 
 
+
 def toggle_safe():
     set_config("safe_mode", not config.safe_mode)
     importlib.reload(config)
     set_safe()
+
 
 def set_safe():
     if config.safe_mode:
@@ -458,26 +510,43 @@ def set_safe():
 
 
 
-        
 
+def switch_tab(tab_name):
+    # Hide all tabs
+    for widget in content_frame.winfo_children():
+        widget.grid_forget()
 
-app.grid_columnconfigure(0, weight=1)
-
-main_frame = ctk.CTkFrame(app)
-main_frame.grid(row=0, column=0, padx=10, pady=10, sticky="new")
-
-main_frame.grid_columnconfigure(0, weight=1)
-main_frame.grid_columnconfigure(1, weight=1)
-main_frame.grid_columnconfigure(2, weight=1)
-
-
+    if tab_name == "main":
+        main_tab_frame.grid(row=0, column=0, sticky="nsew")
+    elif tab_name == "settings":
+        settings_tab_frame.grid(row=0, column=0, sticky="nsew")
 
 
 
 
-# Example for adding widgets to the main frame
-title_label = ctk.CTkLabel(main_frame, text="Dank Memer Bot", font=ctk.CTkFont(size=20, weight="bold"))
-title_label.grid(row=0, column=0, padx=0, pady=0, columnspan=3, sticky="ew")
+
+
+
+# Sidebar Buttons
+main_btn = ctk.CTkButton(sidebar_frame, text="Main", command=lambda: switch_tab("main"))
+main_btn.grid(row=0, column=0, pady=15, padx=10)
+
+settings_btn = ctk.CTkButton(sidebar_frame, text="Settings", command=lambda: switch_tab("settings"))
+settings_btn.grid(row=1, column=0, pady=15, padx=10)
+
+app.grid_columnconfigure(0, weight=0)
+app.grid_columnconfigure(1, weight=1)
+
+
+
+switch_tab("main")
+
+
+
+
+
+title_label = ctk.CTkLabel(main_tab_frame, text="Dank Memer Bot", font=ctk.CTkFont(size=20, weight="bold"))
+title_label.grid(row=0, column=0, padx=0, pady=10, sticky="new")
 
 
 
@@ -505,26 +574,22 @@ def change_key():
 
 
 
-key_btn = ctk.CTkButton(main_frame, text=f"Press {config.key} to toggle", command=change_key, width=100)
-key_btn.grid(row=0, column=2, padx=10, pady=10, sticky="e")
+key_btn = ctk.CTkButton(settings_tab_frame, text=f"Press {config.key} to toggle", command=change_key)
+key_btn.grid(row=2, column=1, padx=0, pady=0)
+
+key_text = ctk.CTkLabel(settings_tab_frame, text="Key to toggle the bot: ", font=ctk.CTkFont(size=15))
+key_text.grid(row=1, column=1, padx=(7, 0), pady=0)
 
 
 
 
-
-
-
-
-
-
-
-
-commands_frame = ctk.CTkFrame(app)
-commands_frame.grid(row=1, column=0, padx=10, pady=0, sticky="new")
+commands_frame = ctk.CTkFrame(main_tab_frame)
+commands_frame.grid(row=1, column=0, padx=10, pady=0, sticky="ew")
 
 commands_frame.grid_columnconfigure(0, weight=1)
 commands_frame.grid_columnconfigure(1, weight=1)
 commands_frame.grid_columnconfigure(2, weight=1)
+commands_frame.grid_rowconfigure(0, weight=1)
 
 
 
@@ -555,27 +620,16 @@ set_stream()
 
 
 
-
-
-
-
-settings_frame = ctk.CTkFrame(app)
-settings_frame.grid(row=2, column=0, padx=10, pady=10, sticky="new")
-
-settings_frame.grid_columnconfigure(0, weight=1)
-settings_frame.grid_columnconfigure(1, weight=1)
-settings_frame.grid_columnconfigure(2, weight=1)
-
-
-
-topwin_check = ctk.CTkCheckBox(settings_frame, text="Window on top", command=toggle_window)
+topwin_check = ctk.CTkCheckBox(settings_tab_frame, text="Window on top", command=toggle_window)
 topwin_check.grid(row=0, column=0, padx=10, pady=10)
 
-stream_check = ctk.CTkCheckBox(settings_frame, text="Stream Unlocked", command=toggle_stream)
+stream_check = ctk.CTkCheckBox(settings_tab_frame, text="Stream Unlocked", command=toggle_stream)
 stream_check.grid(row=0, column=1, padx=10, pady=10)
 
-safe_check = ctk.CTkCheckBox(settings_frame, text="Safe Mode", command=toggle_safe)
+safe_check = ctk.CTkCheckBox(settings_tab_frame, text="Safe Mode", command=toggle_safe)
 safe_check.grid(row=0, column=2, padx=10, pady=10)
+
+
 
 
 
@@ -601,17 +655,17 @@ def set_checks():
 set_checks()
 
 
-time_label = ctk.CTkLabel(settings_frame, text=f"Load time: {config.load_time}", font=ctk.CTkFont(size=15))
-time_label.grid(row=1, column=0, padx=10, pady=10)
+time_label = ctk.CTkLabel(settings_tab_frame, text=f"Load time: {config.load_time}", font=ctk.CTkFont(size=15))
+time_label.grid(row=1, column=0, padx=10, pady=0)
 
 def set_time(value):
     value = round(value, 1)
     set_config("load_time", value)
     time_label.configure(text=f"Load time: {value}")
 
-time_sl = ctk.CTkSlider(settings_frame, width=150, from_=0.1, to=2,command=set_time)
-time_sl.grid(row=2, column=0, padx=10, pady=0)
 
+time_sl = ctk.CTkSlider(settings_tab_frame, width=150, from_=0.1, to=2,command=set_time)
+time_sl.grid(row=2, column=0, padx=10, pady=0)
 time_sl.set(config.load_time)
 
 
