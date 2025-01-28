@@ -4,44 +4,23 @@ import random
 import importlib
 import config
 import os
+from datetime import datetime
 
 
-# region Install required libraries
-
-import subprocess
-import sys
-import pkg_resources
-
-def check_and_install_package(package):
-    """Check if a package is installed and install it if not."""
-    installed_packages = {pkg.key for pkg in pkg_resources.working_set}
-    if package not in installed_packages:
-        print(f"Installing {package}...")
-        subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-    else:
-        # print(f"{package} is already installed.")
-        pass
-
-def install_requirements():
-    try:
-        required_packages = ["keyboard", "pyautogui", "customtkinter"]
-        
-        for package in required_packages:
-            check_and_install_package(package)
-
-    except subprocess.CalledProcessError:
-        print("Error occurred during installation. Please check your Python and pip installation.")
-
-install_requirements()
-
-
-print("Successfully install required libraries")
-
-# endregion
+# region Imports
 
 import pyautogui as kp
 import customtkinter as ctk
 import keyboard as kb
+
+
+
+
+# ---------------------------------------------------------------------------------------------------------
+#
+# Write `pip install pyautogui customtkinter keyboard` in cmd to install libraries if not installed already
+#
+# ---------------------------------------------------------------------------------------------------------
 
 
 
@@ -93,10 +72,22 @@ search_delay = 30
 crime_delay = 46
 beg_delay = 42
 hunt_delay = 22
-stream_delay = 1810 # Requires keyboard & mouse
+stream_delay = 1820 # Requires keyboard & mouse
+
+def get_time():
+    local_time = datetime.now()
+
+    hours = local_time.hour
+    minutes = local_time.minute
+    seconds = local_time.second
+
+    total_seconds = (hours * 3600) + (minutes * 60) + seconds
+
+    return total_seconds
 
 
-timer = 352
+timer = get_time()
+
 
 
 
@@ -139,6 +130,11 @@ def Toggle():
 def start():
     start_btn.configure(text="Running")
     while running:
+        if timer % stream_delay == 0:
+            stream()
+
+        t.sleep(1)
+
         if timer % postmemes_delay == 0:
             postmemes()
 
@@ -153,11 +149,6 @@ def start():
 
         if timer % search_delay == 0:
             search()
-
-        if timer % stream_delay == 0:
-            search()
-        
-        t.sleep(1)
 
 
 
@@ -268,25 +259,71 @@ def reset_text():
     stream_btn.configure(text="Stream")
 
 
+command = False
 
 
-def beg():
+def run(target_function, *args, **kwargs):
+    thread = threading.Thread(target=target_function, args=args, kwargs=kwargs, daemon=True)
+    thread.start()
+
+
+
+def beg():   
+    global command
+    if command:
+        return
+    command = True
+
+
+    pos = kp.position()
+    kp.mouseUp()
+    kp.leftClick(460, 1040)
+    kp.moveTo(pos)
+
     kp.typewrite("/beg")
     t.sleep(config.load_time)
     kp.press('enter')
     kp.press('enter')
 
+    command = False
+
+
 def hunt():
+    
+    global command
+    if command:
+        return
+    command = True
+
+
+    pos = kp.position()
+    kp.mouseUp()
+    kp.leftClick(460, 1040)
+    kp.moveTo(pos)
+
     kp.typewrite("/hunt")
     t.sleep(config.load_time)
     kp.press('enter')
     kp.press('enter')
 
+    command = False
+
 
 def crime():
     if config.safe_mode:
         return
-    
+
+    global command
+    if command:
+        return
+    command = True
+
+
+    pos = kp.position()
+    kp.mouseUp()
+    kp.leftClick(460, 1040)
+    kp.moveTo(pos)
+
     kp.typewrite("/crime")
     t.sleep(config.load_time)
     kp.press('enter')
@@ -296,12 +333,11 @@ def crime():
 
     pos = kp.position()
 
-    xs = [525, 555, 685]
-    y = 990
-    x = random.choice(xs)
-    kp.leftClick(x, y)
+    kp.leftClick(460, 990)
 
     kp.moveTo(pos)
+
+    command = False
 
 
 
@@ -309,6 +345,17 @@ def search():
     if config.safe_mode:
         return
     
+    global command
+    if command:
+        return
+    command = True
+
+
+    pos = kp.position()
+    kp.mouseUp()
+    kp.leftClick(460, 1040)
+    kp.moveTo(pos)
+
     kp.typewrite("/search")
     t.sleep(config.load_time)
     kp.press('enter')
@@ -318,72 +365,112 @@ def search():
 
     pos = kp.position()
 
-    xs = [525, 555, 685]
-    y = 990
-    x = random.choice(xs)
-    kp.leftClick(x, y)
+    kp.leftClick(460, 990)
 
     kp.moveTo(pos)
+
+    command = False
 
 
 
 def postmemes():
+    global command
+    if command:
+        return
+    command = True
+
+
+    pos = kp.position()
+    kp.mouseUp()
+    kp.leftClick(460, 1040)
+    kp.moveTo(pos)
+
     kp.typewrite("/postmemes")
     t.sleep(config.load_time)
     kp.press('enter')
     kp.press('enter')
 
     t.sleep(1.5)
+
     pos = kp.position()
 
     # type
-    x = 550
 
-    kp.leftClick(x, 950)
+    kp.leftClick(460, 950)
 
-    ys = [905, 870, 832, 794, 756]
+    ys = [900, 870, 830, 790, 760]
     y = random.choice(ys)
 
-    kp.leftClick(x, y)
+    kp.leftClick(460, y)
 
     t.sleep(1)
     # platform
-    kp.leftClick(x, 900)
+    kp.leftClick(460, 900)
 
-    x = 550
     ys = [850, 800, 730, 700, 650]
     y = random.choice(ys)
-    kp.leftClick(x, y)
+    kp.leftClick(460, y)
 
     t.sleep(1)
 
-    y = 990
-    x = 450
-    kp.leftClick(x, y)
+    kp.leftClick(460, 990)
 
     kp.moveTo(pos)
+
+    command = False
+
+
 
 
 
 def stream():
+    global command
+    if command:
+        return
+    command = True
+
+
+    pos = kp.position()
+    kp.mouseUp()
+    kp.leftClick(460, 1040)
+    kp.moveTo(pos)
+
     kp.typewrite("/stream")
     t.sleep(config.load_time)
     kp.press('enter')
     kp.press('enter')
 
-    t.sleep(1)
+    t.sleep(2)
 
     pos = kp.position()
 
-    y = 990
-    x = 525
-    kp.leftClick(x, y)
+
+    ys =  [ 990, # main
+            945, # select game
+            910, # game 1
+            875, # game 2
+            830, # game 3
+            800, # game 4
+            760, # game 5
+        ]
+
+
+    kp.leftClick(460, ys[0])
+
     t.sleep(1)
-    kp.leftClick(x, y)
+    kp.leftClick(460, ys[1])
+
+    t.sleep(config.load_time)
+    game = random.randint(2, 6)
+    kp.leftClick(460, ys[game])
+
     t.sleep(1)
-    kp.leftClick(x, y)
+    kp.leftClick(460, ys[0])
+
     t.sleep(1)
     kp.moveTo(pos)
+
+    command = False
 
 
 
@@ -397,20 +484,16 @@ def start_thread():
 
 # region GUI
 
-
 app = ctk.CTk()
 app.title("Dank Memer Bot")
 app.geometry("800x400+460+100")
 
 
 
-
-
-
-
 # Sidebar Frame
 sidebar_frame = ctk.CTkFrame(app, width=150, corner_radius=0)
 sidebar_frame.grid(row=0, column=0, sticky="nsw")
+
 
 
 # Content Frame
@@ -427,24 +510,18 @@ settings_tab_frame = ctk.CTkFrame(content_frame, corner_radius=10)
 
 
 
-
 content_frame.grid_columnconfigure(0, weight=1)
 content_frame.grid_rowconfigure(0, weight=1)
 
 
 
-
-
-settings_tab_frame.grid_rowconfigure(0, weight=0)
-settings_tab_frame.grid_columnconfigure(0, weight=0)
+settings_tab_frame.grid_columnconfigure(0, weight=1)
 settings_tab_frame.grid_columnconfigure(1, weight=1)
 settings_tab_frame.grid_columnconfigure(2, weight=1)
 
 
 
-
-
-
+main_tab_frame.grid_columnconfigure(0, weight=1)  # Center horizontally
 
 
 
@@ -510,7 +587,6 @@ def set_safe():
 
 
 
-
 def switch_tab(tab_name):
     # Hide all tabs
     for widget in content_frame.winfo_children():
@@ -520,9 +596,6 @@ def switch_tab(tab_name):
         main_tab_frame.grid(row=0, column=0, sticky="nsew")
     elif tab_name == "settings":
         settings_tab_frame.grid(row=0, column=0, sticky="nsew")
-
-
-
 
 
 
@@ -540,7 +613,6 @@ app.grid_columnconfigure(1, weight=1)
 
 
 switch_tab("main")
-
 
 
 
@@ -584,7 +656,7 @@ key_text.grid(row=1, column=1, padx=(7, 0), pady=0)
 
 
 commands_frame = ctk.CTkFrame(main_tab_frame)
-commands_frame.grid(row=1, column=0, padx=10, pady=0, sticky="ew")
+commands_frame.grid(row=1, column=0, padx=10, pady=0)
 
 commands_frame.grid_columnconfigure(0, weight=1)
 commands_frame.grid_columnconfigure(1, weight=1)
@@ -596,24 +668,24 @@ commands_frame.grid_rowconfigure(0, weight=1)
 start_btn = ctk.CTkButton(commands_frame, text="Start", command=Toggle)
 start_btn.grid(row=0, column=1, padx=20, pady=10)
 
-beg_btn = ctk.CTkButton(commands_frame, text="Beg", command=beg)
+beg_btn = ctk.CTkButton(commands_frame, text="Beg", command=lambda: run(beg))
 beg_btn.grid(row=1, column=0, padx=20, pady=10)
 
-hunt_btn = ctk.CTkButton(commands_frame, text="Hunt", command=hunt)
+hunt_btn = ctk.CTkButton(commands_frame, text="Hunt", command=lambda: run(hunt))
 hunt_btn.grid(row=1, column=1, padx=20, pady=10)
 
-crime_btn = ctk.CTkButton(commands_frame, text="Crime", command=crime)
+crime_btn = ctk.CTkButton(commands_frame, text="Crime", command=lambda: run(crime))
 crime_btn.grid(row=1, column=2, padx=20, pady=10)
 
-search_btn = ctk.CTkButton(commands_frame, text="Search", command=search)
+search_btn = ctk.CTkButton(commands_frame, text="Search", command=lambda: run(search))
 search_btn.grid(row=2, column=0, padx=20, pady=10)
 
 set_safe()
 
-postmemes_btn = ctk.CTkButton(commands_frame, text="Postmemes", command=postmemes)
+postmemes_btn = ctk.CTkButton(commands_frame, text="Postmemes", command=lambda: run(postmemes))
 postmemes_btn.grid(row=2, column=1, padx=20, pady=10)
 
-stream_btn = ctk.CTkButton(commands_frame, text="Stream", command=stream)
+stream_btn = ctk.CTkButton(commands_frame, text="Stream", command=lambda: run(stream))
 stream_btn.grid(row=2, column=2, padx=20, pady=10)
 
 set_stream()
@@ -621,15 +693,13 @@ set_stream()
 
 
 topwin_check = ctk.CTkCheckBox(settings_tab_frame, text="Window on top", command=toggle_window)
-topwin_check.grid(row=0, column=0, padx=10, pady=10)
+topwin_check.grid(row=0, column=0, padx=10, pady=20)
 
 stream_check = ctk.CTkCheckBox(settings_tab_frame, text="Stream Unlocked", command=toggle_stream)
-stream_check.grid(row=0, column=1, padx=10, pady=10)
+stream_check.grid(row=0, column=1, padx=10, pady=20)
 
 safe_check = ctk.CTkCheckBox(settings_tab_frame, text="Safe Mode", command=toggle_safe)
-safe_check.grid(row=0, column=2, padx=10, pady=10)
-
-
+safe_check.grid(row=0, column=2, padx=10, pady=20)
 
 
 
@@ -664,7 +734,7 @@ def set_time(value):
     time_label.configure(text=f"Load time: {value}")
 
 
-time_sl = ctk.CTkSlider(settings_tab_frame, width=150, from_=0.1, to=2,command=set_time)
+time_sl = ctk.CTkSlider(settings_tab_frame, width=150, from_=0.1, to=3,command=set_time)
 time_sl.grid(row=2, column=0, padx=10, pady=0)
 time_sl.set(config.load_time)
 
