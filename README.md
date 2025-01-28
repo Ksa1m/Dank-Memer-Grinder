@@ -67,6 +67,7 @@ Running
 
 - **28 January 2025**
   - Fixed Streaming command
+  - Now uses local time instead of a fixed timer
 
 - **27 January 2025**
   - New UI
