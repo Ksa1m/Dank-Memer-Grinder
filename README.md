@@ -68,6 +68,7 @@ Running
 - **28 January 2025**
   - Fixed Streaming command
   - Now uses local time instead of a fixed timer
+  - Now user can press command buttons and it will force run the command (the timer won't reset)
 
 - **27 January 2025**
   - New UI
