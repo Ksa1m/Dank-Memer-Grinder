@@ -47,18 +47,23 @@ https://dankmemer.lol/dashboard/settings
 Main Menu
 
 
-![Preview main](https://github.com/user-attachments/assets/464523ae-aff1-4f2b-8e57-9fa0f8ece8c6)
+![Preview Main](https://github.com/user-attachments/assets/f0d26e4f-1822-477a-a26f-595a57c999ca)
+
 
 
 Settings Menu
 
-![Preview settings](https://github.com/user-attachments/assets/6b46fb8d-b352-465c-b1d3-7706277abde9)
+![Preview Settings](https://github.com/user-attachments/assets/f8a71b3f-6b44-4374-bc63-cf18d0e6e3d9)
 
 
 
-Running
 
-![Preview running](https://github.com/user-attachments/assets/19833f72-f3c4-4292-8436-e185b24328ff)
+Help Menu
+
+
+![Preview Help](https://github.com/user-attachments/assets/9b21c386-7709-4673-9c63-a425f01d2e6f)
+
+
 
 
 <br>
