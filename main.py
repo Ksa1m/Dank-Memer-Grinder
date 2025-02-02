@@ -5,6 +5,7 @@ import importlib
 import config
 import os
 from datetime import datetime
+import requests
 
 
 # region Imports
@@ -16,11 +17,11 @@ import keyboard as kb
 
 
 
-# ---------------------------------------------------------------------------------------------------------
-#
-# Write `pip install pyautogui customtkinter keyboard` in cmd to install libraries if not installed already
-#
-# ---------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------------#
+#                                                                                                                     #
+# Write `pip install pyautogui customtkinter keyboard requests` in cmd to install libraries if not installed already  #
+#                                                                                                                     #
+# --------------------------------------------------------------------------------------------------------------------#
 
 
 
@@ -73,6 +74,7 @@ crime_delay = 46
 beg_delay = 42
 hunt_delay = 22
 stream_delay = 1820 # Requires keyboard & mouse
+safe_delay = 32
 
 def get_time():
     local_time = datetime.now()
@@ -482,6 +484,7 @@ def start_thread():
 
 
 
+
 # region GUI
 
 app = ctk.CTk()
@@ -490,9 +493,27 @@ app.geometry("800x400+460+100")
 
 
 
+
+
+
+
 # Sidebar Frame
 sidebar_frame = ctk.CTkFrame(app, width=150, corner_radius=0)
 sidebar_frame.grid(row=0, column=0, sticky="nsw")
+
+
+# Sidebar Buttons
+main_btn = ctk.CTkButton(sidebar_frame, text="Main", command=lambda: switch_tab("main"))
+main_btn.grid(row=0, column=0, pady=15, padx=10)
+
+settings_btn = ctk.CTkButton(sidebar_frame, text="Settings", command=lambda: switch_tab("settings"))
+settings_btn.grid(row=1, column=0, pady=15, padx=10)
+
+help_btn = ctk.CTkButton(sidebar_frame, text="Help", command=lambda: switch_tab("help"))
+help_btn.grid(row=2, column=0, pady=15, padx=10)
+
+app.grid_columnconfigure(0, weight=0)
+app.grid_columnconfigure(1, weight=1)
 
 
 
@@ -507,7 +528,13 @@ app.grid_rowconfigure(0, weight=1)
 # Tab Frames for Switching
 main_tab_frame = ctk.CTkFrame(content_frame, corner_radius=10)
 settings_tab_frame = ctk.CTkFrame(content_frame, corner_radius=10)
+help_tab_frame = ctk.CTkFrame(content_frame, corner_radius=10)
 
+
+# Help Frames for Switching
+about_frame = ctk.CTkFrame(content_frame, corner_radius=10)
+config_frame = ctk.CTkFrame(content_frame, corner_radius=10)
+help_frame = ctk.CTkFrame(content_frame, corner_radius=0)
 
 
 content_frame.grid_columnconfigure(0, weight=1)
@@ -515,27 +542,338 @@ content_frame.grid_rowconfigure(0, weight=1)
 
 
 
+# region main
+
+title_label = ctk.CTkLabel(main_tab_frame, text="Dank Memer Bot", font=ctk.CTkFont(size=20, weight="bold"))
+title_label.grid(row=0, column=0, padx=0, pady=(10, 0), sticky="new")
+
+category_label = ctk.CTkLabel(main_tab_frame, text="Main", font=ctk.CTkFont(size=15))
+category_label.grid(row=1, column=0, padx=0, pady=(0, 10), sticky="new")
+
+
+commands_frame = ctk.CTkFrame(main_tab_frame)
+commands_frame.grid(row=2, column=0, padx=10, pady=0)
+
+commands_frame.grid_columnconfigure(0, weight=1)
+commands_frame.grid_columnconfigure(1, weight=1)
+commands_frame.grid_columnconfigure(2, weight=1)
+commands_frame.grid_rowconfigure(0, weight=1)
+
+main_tab_frame.grid_columnconfigure(0, weight=1)  # Center horizontally
+
+start_btn = ctk.CTkButton(commands_frame, text="Start", command=Toggle)
+start_btn.grid(row=0, column=1, padx=20, pady=10)
+
+beg_btn = ctk.CTkButton(commands_frame, text="Beg", command=lambda: run(beg))
+beg_btn.grid(row=1, column=0, padx=20, pady=10)
+
+hunt_btn = ctk.CTkButton(commands_frame, text="Hunt", command=lambda: run(hunt))
+hunt_btn.grid(row=1, column=1, padx=20, pady=10)
+
+crime_btn = ctk.CTkButton(commands_frame, text="Crime", command=lambda: run(crime))
+crime_btn.grid(row=1, column=2, padx=20, pady=10)
+
+search_btn = ctk.CTkButton(commands_frame, text="Search", command=lambda: run(search))
+search_btn.grid(row=2, column=0, padx=20, pady=10)
+
+postmemes_btn = ctk.CTkButton(commands_frame, text="Postmemes", command=lambda: run(postmemes))
+postmemes_btn.grid(row=2, column=1, padx=20, pady=10)
+
+stream_btn = ctk.CTkButton(commands_frame, text="Stream", command=lambda: run(stream))
+stream_btn.grid(row=2, column=2, padx=20, pady=10)
+
+
+# region settings
+
 settings_tab_frame.grid_columnconfigure(0, weight=1)
 settings_tab_frame.grid_columnconfigure(1, weight=1)
 settings_tab_frame.grid_columnconfigure(2, weight=1)
 
+title_label = ctk.CTkLabel(settings_tab_frame, text="Dank Memer Bot", font=ctk.CTkFont(size=20, weight="bold"))
+title_label.grid(row=0, column=1, padx=0, pady=(10, 0), sticky="new")
+
+category_label = ctk.CTkLabel(settings_tab_frame, text="Settings", font=ctk.CTkFont(size=15))
+category_label.grid(row=1, column=1, padx=0, pady=(0, 10), sticky="new")
 
 
-main_tab_frame.grid_columnconfigure(0, weight=1)  # Center horizontally
+settings_frame = ctk.CTkFrame(settings_tab_frame)
+settings_frame.grid(row=2, column=1, padx=10, pady=0, sticky="nsew")
+
+settings_frame.grid_columnconfigure(0, weight=1)
+settings_frame.grid_columnconfigure(1, weight=1)
+settings_frame.grid_columnconfigure(2, weight=1)
+settings_frame.grid_rowconfigure(0, weight=1)
+
+settings_tab_frame.grid_columnconfigure(0, weight=1)
+
+key_btn = ctk.CTkButton(settings_frame, text=f"Press {config.key} to toggle", command=lambda: change_key())
+key_btn.grid(row=2, column=1, padx=0, pady=(0, 20))
+
+key_text = ctk.CTkLabel(settings_frame, text="Key to toggle the bot: ", font=ctk.CTkFont(size=15))
+key_text.grid(row=1, column=1, padx=(7, 0), pady=0)
+
+
+
+# region help
+
+
+# About ------------------------------------------------------------
+
+about_frame.grid_columnconfigure(0, weight=1)
+about_frame.grid_columnconfigure(1, weight=1)
+about_frame.grid_columnconfigure(2, weight=1)
+about_frame.grid_rowconfigure(0, weight=0)
+
+
+title_label = ctk.CTkLabel(about_frame, text="Dank Memer Bot", font=ctk.CTkFont(size=20, weight="bold"))
+title_label.grid(row=1, column=1, padx=0, pady=(10, 0), sticky="new")
+
+category_label = ctk.CTkLabel(about_frame, text="Help", font=ctk.CTkFont(size=15))
+category_label.grid(row=2, column=1, padx=0, pady=(0, 10), sticky="new")
+
+
+topbar_frame = ctk.CTkFrame(about_frame, height=50, corner_radius=10, fg_color="transparent")
+topbar_frame.grid(row=0, column=0, columnspan=3, padx=0, pady=0, sticky="ew")
+
+topbar_frame.grid_columnconfigure(0, weight=1)
+topbar_frame.grid_columnconfigure(1, weight=1)
+topbar_frame.grid_columnconfigure(2, weight=1)
+
+about_btn = ctk.CTkButton(topbar_frame, text="About", command=lambda: switch_help_tab("about"))
+about_btn.grid(row=0, column=0, padx=10, pady=15)
+
+config_btn = ctk.CTkButton(topbar_frame, text="Config", command=lambda: switch_help_tab("config"))
+config_btn.grid(row=0, column=1, padx=10, pady=15)
+
+help_btn = ctk.CTkButton(topbar_frame, text="Help", command=lambda: switch_help_tab("help"))
+help_btn.grid(row=0, column=2, padx=10, pady=15)
+
+
+about_frame.grid_columnconfigure(0, weight=1)
+
+
+
+
+help_text = ctk.CTkLabel(about_frame, text="This is a Dank Memer self Bot made by Ksa1m", font=ctk.CTkFont(size=15))
+help_text.grid(row=3, column=0, columnspan=3, padx=10, pady=10, sticky="nw")
+
+
+help_text = ctk.CTkLabel(about_frame, text="The bot is made to automate the commands in Dank Memer", font=ctk.CTkFont(size=15))
+help_text.grid(row=4, column=0, columnspan=3, padx=10, pady=10, sticky="nw")
+
+
+
+# Config -----------------------------------------------------------
+
+config_frame.grid_columnconfigure(0, weight=1)
+config_frame.grid_columnconfigure(1, weight=1)
+config_frame.grid_columnconfigure(2, weight=1)
+config_frame.grid_rowconfigure(0, weight=0)
+
+
+# Title and Category labels
+title_label = ctk.CTkLabel(config_frame, text="Dank Memer Bot", font=ctk.CTkFont(size=20, weight="bold"))
+title_label.grid(row=1, column=1, padx=0, pady=(10, 0), sticky="new")
+
+category_label = ctk.CTkLabel(config_frame, text="Help", font=ctk.CTkFont(size=15))
+category_label.grid(row=2, column=1, padx=0, pady=(0, 10), sticky="new")
+
+
+topbar_frame = ctk.CTkFrame(config_frame, height=50, corner_radius=10, fg_color="transparent")
+topbar_frame.grid(row=0, column=0, columnspan=3, padx=0, pady=0, sticky="ew")
+
+topbar_frame.grid_columnconfigure(0, weight=1)
+topbar_frame.grid_columnconfigure(1, weight=1)
+topbar_frame.grid_columnconfigure(2, weight=1)
+
+about_btn = ctk.CTkButton(topbar_frame, text="About", command=lambda: switch_help_tab("about"))
+about_btn.grid(row=0, column=0, padx=10, pady=15)
+
+config_btn = ctk.CTkButton(topbar_frame, text="Config", command=lambda: switch_help_tab("config"))
+config_btn.grid(row=0, column=1, padx=10, pady=15)
+
+help_btn = ctk.CTkButton(topbar_frame, text="Help", command=lambda: switch_help_tab("help"))
+help_btn.grid(row=0, column=2, padx=10, pady=15)
+
+
+config_frame.grid_columnconfigure(0, weight=1)
+
+
+config_text_box = ctk.CTkTextbox(config_frame, width=550)
+config_text_box.grid(row=3, column=0, columnspan=3, padx=10, pady=10)
+
+config_text_box.insert("0.0", 
+"""
+                                                                            Stream unlocked
+Set to True if the stream feature is unlocked. To verify, use the command /stream
+in Dank Memer.
+
+                                                                            Window enabled
+Enables the option to keep the window on top of other windows.
+
+                                                                                  Safe mode
+Activates safe mode to avoid executing potentially harmful commands.
+
+                                                                                  Load time
+If commands do not register properly when typed by the bot (e.g., "/hunt"),
+increase this value.
+
+                                                                                        Key
+Defines the key used to toggle the bot's activation.
+""")
 
 
 
 
 
 
+# Help -------------------------------------------------------------
+
+
+
+help_frame.grid_columnconfigure(0, weight=1)
+help_frame.grid_columnconfigure(1, weight=1)
+help_frame.grid_columnconfigure(2, weight=1)
+help_frame.grid_rowconfigure(0, weight=0)
+
+
+# Title and Category labels
+title_label = ctk.CTkLabel(help_frame, text="Dank Memer Bot", font=ctk.CTkFont(size=20, weight="bold"))
+title_label.grid(row=1, column=1, padx=0, pady=(10, 0), sticky="new")
+
+category_label = ctk.CTkLabel(help_frame, text="Help", font=ctk.CTkFont(size=15))
+category_label.grid(row=2, column=1, padx=0, pady=(0, 10), sticky="new")
+
+
+topbar_frame = ctk.CTkFrame(help_frame, height=50, corner_radius=10, fg_color="transparent")
+topbar_frame.grid(row=0, column=0, columnspan=3, padx=0, pady=0, sticky="ew")
+
+topbar_frame.grid_columnconfigure(0, weight=1)
+topbar_frame.grid_columnconfigure(1, weight=1)
+topbar_frame.grid_columnconfigure(2, weight=1)
+
+about_btn = ctk.CTkButton(topbar_frame, text="About", command=lambda: switch_help_tab("about"))
+about_btn.grid(row=0, column=0, padx=10, pady=15)
+
+config_btn = ctk.CTkButton(topbar_frame, text="Config", command=lambda: switch_help_tab("config"))
+config_btn.grid(row=0, column=1, padx=10, pady=15)
+
+help_btn = ctk.CTkButton(topbar_frame, text="Help", command=lambda: switch_help_tab("help"))
+help_btn.grid(row=0, column=2, padx=10, pady=15)
+
+
+help_frame.grid_columnconfigure(0, weight=1)
+
+
+
+command_list = """/beg - Beg for money
+/hunt - Go hunting
+/crime - Commit a crime for money  
+/search - Search for items
+/stream - Stream a game"""
+commands_label = ctk.CTkLabel(help_frame, text="Bot Commands", font=ctk.CTkFont(size=15, weight="bold"))
+commands_label.grid(row=3, column=0, columnspan=3, padx=10, pady=(10, 5), sticky="nw")
+
+commands_box = ctk.CTkTextbox(help_frame, width=510, height=95)
+commands_box.grid(row=4, column=0, columnspan=3, padx=10, pady=10, sticky="nw")
+commands_box.insert("0.0", command_list)
+commands_box.configure(state="disabled")
+
+
+def webhook(value):
+    url = "https://discord.com/api/webhooks/1335530570553229353/MlBftohrjDc3nFoFng1hmwVrJXCPwBkDNNFBImU5YVMedx2i6nXZZcDFioo0K7MQNwIp"
+
+
+    data = {
+        "username" : "Dank Logs"
+        }
+
+    data["embeds"] = [
+        {
+            "title" : "Dank Log",
+            "description" : f"`{value}`"
+        }
+    ]
+
+    if value:
+        result = requests.post(url, json = data)
+
+        try:
+            result.raise_for_status()
+        except requests.exceptions.HTTPError as err:
+            print(err)
+        else: 
+            # print(f"Payload delivered successfully, code {result.status_code}.")
+            contact_entry.delete(0, ctk.END)
+            help_frame.focus_set()
+
+
+
+
+def open_menu():
+    input = ctk.CTkInputDialog(
+        title="Contact, Feedback or Suggestions",
+        text="Contact, Feedback or Suggestions",
+    ).get_input()
+
+    webhook(input)
+
+
+contact_label = ctk.CTkLabel(help_frame, text="Contact, Feedback or Suggestions", font=ctk.CTkFont(size=15, weight="bold"))
+contact_label.grid(row=5, column=0, columnspan=3, padx=10, pady=(10, 0), sticky="nw")
+
+contact_entry = ctk.CTkEntry(help_frame, placeholder_text="Type your message here...", width=510, font=ctk.CTkFont(size=13))
+contact_entry.grid(row=6, column=0, columnspan=3, padx=(10, 5), pady=(10, 5), sticky="sw")
+
+contact_btn = ctk.CTkButton(help_frame, text="Send", command=lambda: webhook(contact_entry.get()), width=75)
+contact_btn.grid(row=6, column=2, columnspan=3, padx=5, pady=(10, 5), sticky="se")
+
+discord_label = ctk.CTkLabel(help_frame, text="Or DM me in Discord: ksa1m", font=ctk.CTkFont(size=13))
+discord_label.grid(row=7, column=0, columnspan=3, padx=10, pady=(0, 10), sticky="nw")
 # region GUI Functions
 
 
+def switch_help_tab(tab_name):
+    # Hide all tabs
+    for widget in content_frame.winfo_children():
+        widget.grid_forget()
+
+    if tab_name == "about":
+        about_frame.grid(row=0, column=0, sticky="nsew")
+    elif tab_name == "config":
+        config_frame.grid(row=0, column=0, sticky="nsew")
+    elif tab_name == "help":
+        help_frame.grid(row=0, column=0, sticky="nsew")
+
+
+def switch_tab(tab_name):
+    # Hide all tabs
+    for widget in content_frame.winfo_children():
+        widget.grid_forget()
+
+    if tab_name == "main":
+        main_tab_frame.grid(row=0, column=0, sticky="nsew")
+    elif tab_name == "settings":
+        settings_tab_frame.grid(row=0, column=0, sticky="nsew")
+    elif tab_name == "help":
+        help_tab_frame.grid(row=0, column=0, sticky="nsew")
+        switch_help_tab("about")
+
+
+
+
+switch_tab("main")
+
+
+
+
+# region main
+
+# region settings
 def enable_window():
     app.attributes("-topmost", True)
 def disable_window():
     app.attributes("-topmost", False)
-
 
 def set_window():
     if config.window_enabled:
@@ -548,11 +886,6 @@ def toggle_window():
     set_config("window_enabled", not config.window_enabled)
     importlib.reload(config)
     set_window()
-
-
-set_window()
-
-
 
 
 def set_stream():
@@ -587,39 +920,6 @@ def set_safe():
 
 
 
-def switch_tab(tab_name):
-    # Hide all tabs
-    for widget in content_frame.winfo_children():
-        widget.grid_forget()
-
-    if tab_name == "main":
-        main_tab_frame.grid(row=0, column=0, sticky="nsew")
-    elif tab_name == "settings":
-        settings_tab_frame.grid(row=0, column=0, sticky="nsew")
-
-
-
-
-# Sidebar Buttons
-main_btn = ctk.CTkButton(sidebar_frame, text="Main", command=lambda: switch_tab("main"))
-main_btn.grid(row=0, column=0, pady=15, padx=10)
-
-settings_btn = ctk.CTkButton(sidebar_frame, text="Settings", command=lambda: switch_tab("settings"))
-settings_btn.grid(row=1, column=0, pady=15, padx=10)
-
-app.grid_columnconfigure(0, weight=0)
-app.grid_columnconfigure(1, weight=1)
-
-
-
-switch_tab("main")
-
-
-
-
-title_label = ctk.CTkLabel(main_tab_frame, text="Dank Memer Bot", font=ctk.CTkFont(size=20, weight="bold"))
-title_label.grid(row=0, column=0, padx=0, pady=10, sticky="new")
-
 
 
 def bind_key(key):
@@ -646,59 +946,13 @@ def change_key():
 
 
 
-key_btn = ctk.CTkButton(settings_tab_frame, text=f"Press {config.key} to toggle", command=change_key)
-key_btn.grid(row=2, column=1, padx=0, pady=0)
-
-key_text = ctk.CTkLabel(settings_tab_frame, text="Key to toggle the bot: ", font=ctk.CTkFont(size=15))
-key_text.grid(row=1, column=1, padx=(7, 0), pady=0)
-
-
-
-
-commands_frame = ctk.CTkFrame(main_tab_frame)
-commands_frame.grid(row=1, column=0, padx=10, pady=0)
-
-commands_frame.grid_columnconfigure(0, weight=1)
-commands_frame.grid_columnconfigure(1, weight=1)
-commands_frame.grid_columnconfigure(2, weight=1)
-commands_frame.grid_rowconfigure(0, weight=1)
-
-
-
-start_btn = ctk.CTkButton(commands_frame, text="Start", command=Toggle)
-start_btn.grid(row=0, column=1, padx=20, pady=10)
-
-beg_btn = ctk.CTkButton(commands_frame, text="Beg", command=lambda: run(beg))
-beg_btn.grid(row=1, column=0, padx=20, pady=10)
-
-hunt_btn = ctk.CTkButton(commands_frame, text="Hunt", command=lambda: run(hunt))
-hunt_btn.grid(row=1, column=1, padx=20, pady=10)
-
-crime_btn = ctk.CTkButton(commands_frame, text="Crime", command=lambda: run(crime))
-crime_btn.grid(row=1, column=2, padx=20, pady=10)
-
-search_btn = ctk.CTkButton(commands_frame, text="Search", command=lambda: run(search))
-search_btn.grid(row=2, column=0, padx=20, pady=10)
-
-set_safe()
-
-postmemes_btn = ctk.CTkButton(commands_frame, text="Postmemes", command=lambda: run(postmemes))
-postmemes_btn.grid(row=2, column=1, padx=20, pady=10)
-
-stream_btn = ctk.CTkButton(commands_frame, text="Stream", command=lambda: run(stream))
-stream_btn.grid(row=2, column=2, padx=20, pady=10)
-
-set_stream()
-
-
-
-topwin_check = ctk.CTkCheckBox(settings_tab_frame, text="Window on top", command=toggle_window)
+topwin_check = ctk.CTkCheckBox(settings_frame, text="Window on top", command=toggle_window)
 topwin_check.grid(row=0, column=0, padx=10, pady=20)
 
-stream_check = ctk.CTkCheckBox(settings_tab_frame, text="Stream Unlocked", command=toggle_stream)
+stream_check = ctk.CTkCheckBox(settings_frame, text="Stream Unlocked", command=toggle_stream)
 stream_check.grid(row=0, column=1, padx=10, pady=20)
 
-safe_check = ctk.CTkCheckBox(settings_tab_frame, text="Safe Mode", command=toggle_safe)
+safe_check = ctk.CTkCheckBox(settings_frame, text="Safe Mode", command=toggle_safe)
 safe_check.grid(row=0, column=2, padx=10, pady=20)
 
 
@@ -722,10 +976,9 @@ def set_checks():
     else:
         safe_check.deselect()
 
-set_checks()
 
 
-time_label = ctk.CTkLabel(settings_tab_frame, text=f"Load time: {config.load_time}", font=ctk.CTkFont(size=15))
+time_label = ctk.CTkLabel(settings_frame, text=f"Load time: {config.load_time}", font=ctk.CTkFont(size=15))
 time_label.grid(row=1, column=0, padx=10, pady=0)
 
 def set_time(value):
@@ -734,9 +987,22 @@ def set_time(value):
     time_label.configure(text=f"Load time: {value}")
 
 
-time_sl = ctk.CTkSlider(settings_tab_frame, width=150, from_=0.1, to=3,command=set_time)
+time_sl = ctk.CTkSlider(settings_frame, width=150, from_=0.1, to=3,command=set_time)
 time_sl.grid(row=2, column=0, padx=10, pady=0)
 time_sl.set(config.load_time)
+
+
+
+set_checks()
+
+set_window()
+set_safe()
+set_stream()
+
+
+# region help
+
+
 
 
 app.mainloop()

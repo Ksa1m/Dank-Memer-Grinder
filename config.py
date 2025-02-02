@@ -1,14 +1,14 @@
-# Set to true if you have stream unlocked. To check, do /stream in dankmemer
+# Set to True if the stream feature is unlocked. To verify, use the command /stream in Dank Memer.
 stream_unlocked = False
 
-# If you want the window to stay on top
+# Enables the option to keep the window on top of other windows.
 window_enabled = True
 
-# Doesn't type commands that could get you killed
+# Activates safe mode to avoid executing potentially harmful commands.
 safe_mode = True
 
-# If the commands don't register and you type /hunt like a normal text, instead of a command, then you need to increase this
+# If commands do not register properly when typed normally (e.g., "/hunt"), increase this value.
 load_time = 0.3
 
-# Key to toggle the bot
+# Defines the key used to toggle the bot's activation.
 key = "F8"
