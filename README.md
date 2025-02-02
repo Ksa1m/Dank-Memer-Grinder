@@ -65,6 +65,9 @@ Running
 
 # Change Log
 
+- **2 February 2025**
+  - Added Help Tab
+
 - **28 January 2025**
   - Fixed Streaming command
   - Now uses local time instead of a fixed timer
