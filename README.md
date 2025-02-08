@@ -32,6 +32,7 @@ A bot for getting money automatically in DankMemer Discord Bot
     ![new ui](https://github.com/user-attachments/assets/91d95cf3-4053-41e0-80ae-7268b9060aab)
 
 
+# Information
 
 ### Automatically types these commands:
 - postmemes
