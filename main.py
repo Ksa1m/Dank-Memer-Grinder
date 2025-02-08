@@ -6,9 +6,10 @@ import config
 import os
 from datetime import datetime
 import requests
+import subprocess
 
 
-# region Imports
+# region required Imports
 
 import pyautogui as kp
 import customtkinter as ctk
@@ -60,9 +61,6 @@ def set_config(variable, value):
     except Exception as e:
         print(f"Error: {e}")
         return
-
-
-
 
 
 
@@ -493,14 +491,9 @@ app.geometry("800x400+460+100")
 
 
 
-
-
-
-
 # Sidebar Frame
 sidebar_frame = ctk.CTkFrame(app, width=150, corner_radius=0)
 sidebar_frame.grid(row=0, column=0, sticky="nsw")
-
 
 # Sidebar Buttons
 main_btn = ctk.CTkButton(sidebar_frame, text="Main", command=lambda: switch_tab("main"))
@@ -515,40 +508,33 @@ help_btn.grid(row=2, column=0, pady=15, padx=10)
 app.grid_columnconfigure(0, weight=0)
 app.grid_columnconfigure(1, weight=1)
 
-
-
 # Content Frame
 content_frame = ctk.CTkFrame(app, corner_radius=10, fg_color="transparent")
 content_frame.grid(row=0, column=1, padx=10, sticky="nsew")
 app.grid_columnconfigure(1, weight=1)
 app.grid_rowconfigure(0, weight=1)
 
-
-
 # Tab Frames for Switching
 main_tab_frame = ctk.CTkFrame(content_frame, corner_radius=10)
 settings_tab_frame = ctk.CTkFrame(content_frame, corner_radius=10)
 help_tab_frame = ctk.CTkFrame(content_frame, corner_radius=10)
-
+discord_frame = ctk.CTkFrame(content_frame, corner_radius=10)
 
 # Help Frames for Switching
 about_frame = ctk.CTkFrame(content_frame, corner_radius=10)
 config_frame = ctk.CTkFrame(content_frame, corner_radius=10)
 help_frame = ctk.CTkFrame(content_frame, corner_radius=0)
-
+discord_frame = ctk.CTkFrame(content_frame, corner_radius=0)
 
 content_frame.grid_columnconfigure(0, weight=1)
 content_frame.grid_rowconfigure(0, weight=1)
 
-
-
 # region main
-
 title_label = ctk.CTkLabel(main_tab_frame, text="Dank Memer Bot", font=ctk.CTkFont(size=20, weight="bold"))
-title_label.grid(row=0, column=0, padx=0, pady=(10, 0), sticky="new")
+title_label.grid(row=0, column=0, padx=0, pady=(10, 0), columnspan=3, sticky="nsew")
 
 category_label = ctk.CTkLabel(main_tab_frame, text="Main", font=ctk.CTkFont(size=15))
-category_label.grid(row=1, column=0, padx=0, pady=(0, 10), sticky="new")
+category_label.grid(row=1, column=0, padx=0, pady=(0, 10), columnspan=3, sticky="nsew")
 
 
 commands_frame = ctk.CTkFrame(main_tab_frame)
@@ -558,8 +544,7 @@ commands_frame.grid_columnconfigure(0, weight=1)
 commands_frame.grid_columnconfigure(1, weight=1)
 commands_frame.grid_columnconfigure(2, weight=1)
 commands_frame.grid_rowconfigure(0, weight=1)
-
-main_tab_frame.grid_columnconfigure(0, weight=1)  # Center horizontally
+main_tab_frame.grid_columnconfigure(0, weight=1)
 
 start_btn = ctk.CTkButton(commands_frame, text="Start", command=Toggle)
 start_btn.grid(row=0, column=1, padx=20, pady=10)
@@ -830,8 +815,55 @@ contact_btn.grid(row=6, column=2, columnspan=3, padx=5, pady=(10, 5), sticky="se
 
 discord_label = ctk.CTkLabel(help_frame, text="Or DM me in Discord: ksa1m", font=ctk.CTkFont(size=13))
 discord_label.grid(row=7, column=0, columnspan=3, padx=10, pady=(0, 10), sticky="nw")
-# region GUI Functions
 
+
+
+
+# Discord ------------------------------------------------------------
+
+
+discord_frame.grid_columnconfigure(0, weight=1)
+
+title_label = ctk.CTkLabel(discord_frame, text="Dank Memer Bot", font=ctk.CTkFont(size=20, weight="bold"))
+title_label.grid(row=0, column=0, padx=0, pady=20, columnspan=3, sticky="nsew")
+
+start_label = ctk.CTkLabel(discord_frame, text="Discord is not open", font=ctk.CTkFont(size=25, weight="bold"))
+start_label.grid(row=1, column=0, padx=10, pady=(50, 0), columnspan=3, sticky="new")
+
+error_label = ctk.CTkLabel(discord_frame, text=f"Could not find the path to Discord", font=ctk.CTkFont(size=18, weight="bold"), state="disabled")
+# error_label.grid(row=3, column=0, padx=10, pady=20, columnspan=3, sticky="nsew")
+
+
+def open_discord():
+    try:
+        user_path = os.path.expanduser("~")
+        discord_path = os.path.join(user_path, "AppData", "Local", "Discord")
+        dirs = os.listdir(discord_path)
+        for dir in dirs:
+            if dir.startswith("app-"):
+                discord_path = os.path.join(discord_path, dir, "Discord.exe")
+                subprocess.Popen(discord_path, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                return
+
+
+        error_label.grid(row=3, column=0, padx=10, pady=20, columnspan=3, sticky="nsew")
+        error_label.configure(text=f"Could not find Discord.exe in \n{discord_path} \nDid you change the default installation path of Discord?")
+        subprocess.run(["explorer", discord_path])
+        app.geometry("800x400+50+100")
+    except Exception as e:
+        print(f"Error opening Discord: \n{e}")
+
+
+
+
+start_btn = ctk.CTkButton(discord_frame, text="Open Discord", font=ctk.CTkFont(size=15), command=open_discord)
+start_btn.grid(row=2, column=0, padx=10, pady=20)
+
+
+
+
+
+# region GUI Functions
 
 def switch_help_tab(tab_name):
     # Hide all tabs
@@ -855,6 +887,8 @@ def switch_tab(tab_name):
         main_tab_frame.grid(row=0, column=0, sticky="nsew")
     elif tab_name == "settings":
         settings_tab_frame.grid(row=0, column=0, sticky="nsew")
+    elif tab_name == "discord":
+        discord_frame.grid(row=0, column=0, sticky="nsew")
     elif tab_name == "help":
         help_tab_frame.grid(row=0, column=0, sticky="nsew")
         switch_help_tab("about")
@@ -863,6 +897,58 @@ def switch_tab(tab_name):
 
 
 switch_tab("main")
+
+
+
+
+# Discord check function
+def process_running(process_name: str):
+    output = subprocess.run(["tasklist"], capture_output=True, text=True)
+    return process_name.lower() in output.stdout.lower()
+
+
+
+def enable_sidebar():
+    for widget in sidebar_frame.winfo_children():
+        widget.configure(state="normal")
+
+def disable_sidebar():
+    for widget in sidebar_frame.winfo_children():
+        widget.configure(state="disabled")
+
+
+
+disable_sidebar()
+
+
+if not process_running("discord.exe"):
+    switch_tab("discord")
+else:
+    enable_sidebar()
+
+
+def Discord():
+    def wait_for_discord():
+        while not process_running("discord.exe"):  # Keep checking if Discord is running
+            t.sleep(1)
+            disable_sidebar()
+
+
+
+        enable_sidebar()
+        switch_tab("main")
+
+
+    if not process_running("discord.exe"):
+        wiscord = threading.Thread(target=wait_for_discord, daemon=True)
+        wiscord.start()
+
+
+if not process_running("discord.exe"):
+    switch_tab("discord")
+    Discord()
+
+
 
 
 
