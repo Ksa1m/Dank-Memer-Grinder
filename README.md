@@ -2,6 +2,37 @@
 A bot for getting money automatically in DankMemer Discord Bot
 
 
+## What's new
+
+- **8 February 2025**
+  - Now checks if Discord is open
+  - Added a button to open Discord
+
+    
+    ![discord](https://github.com/user-attachments/assets/bb8eb97e-26dd-410d-8ce1-a6b124df1f96)
+
+
+
+
+- **2 February 2025**
+  - Added Help Tab
+    
+    ![help](https://github.com/user-attachments/assets/8f00e3dc-8b05-4970-a67f-376476db02ec)
+
+    
+
+- **28 January 2025**
+  - Fixed Streaming command
+  - Now uses local time instead of a fixed timer
+  - Now user can press command buttons and it will force run the command (the timer won't reset)
+
+- **27 January 2025**
+  - New UI
+ 
+    ![new ui](https://github.com/user-attachments/assets/91d95cf3-4053-41e0-80ae-7268b9060aab)
+
+
+
 ### Automatically types these commands:
 - postmemes
 - search
@@ -14,11 +45,12 @@ For it to work you always have to be in the discord window.
 
 - Tips can break commands with mouse clicks, so I recommend disabling them in Dank memer settings 
 https://dankmemer.lol/dashboard/settings
-![settings](https://github.com/user-attachments/assets/0d87b4b5-d11c-4450-b14b-bc7d1f6f2dd8)
+
+  ![settings](https://github.com/user-attachments/assets/0d87b4b5-d11c-4450-b14b-bc7d1f6f2dd8)
 
 - If you don't have required python libraries installed, run `pip install pyautogui customtkinter keyboard` in cmd
 
-- I also recommend running the bot in Dank memer DMs or in separate server because if anyone sends messages in the same channel as you, clicking commands won't work
+- It is recommended running the bot in Dank memer DMs or in separate server because if anyone sends messages in the same channel as you, commands might not work
 
 ## Config
 
@@ -68,16 +100,5 @@ Help Menu
 
 <br>
 
-# Change Log
 
-- **2 February 2025**
-  - Added Help Tab
-
-- **28 January 2025**
-  - Fixed Streaming command
-  - Now uses local time instead of a fixed timer
-  - Now user can press command buttons and it will force run the command (the timer won't reset)
-
-- **27 January 2025**
-  - New UI
 
