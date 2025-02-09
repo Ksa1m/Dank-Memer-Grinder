@@ -37,6 +37,7 @@ A bot for getting money automatically in DankMemer Discord Bot
 ### In Development
 - [ ] Automatically buy hunting rifle if it gets broken
 - [ ] Commands tab where you can toggle them, adjust delay and setting a chance of writing it
+- [ ] Check for tips
 
  
 
@@ -51,28 +52,24 @@ https://dankmemer.lol/dashboard/settings
 
   ![settings](https://github.com/user-attachments/assets/0d87b4b5-d11c-4450-b14b-bc7d1f6f2dd8)
 
-- If you don't have required python libraries installed, run `pip install pyautogui customtkinter keyboard` in cmd
-
-- It is recommended running the bot in Dank memer DMs or in separate server because if anyone sends messages in the same channel as you, commands might not work
 
 ## Config
 
-- Set to true if you have stream unlocked. To check, type /stream in dankmemer
+- Set to True if the stream feature is unlocked. To verify, use the command /stream in Dank Memer.
   - Stream unlocked
 
 
-- If you want the window to stay on top
+- Enables the option to keep the window on top of other windows.
   - Window enabled
 
-- Doesn't type commands that could get you killed, like /search, to prevent you from losing money if you do die
+- Doesn't type commands that could get you killed, like /search, to prevent you from losing money
   - Safe mode
 
-- If the commands don't register and you type /hunt like a normal text, instead of a command, then you need to increase this
+- If commands do not register properly when typed normally (e.g., "/hunt"), increase this value.
   - Load time
 
 - Key to toggle the bot
   - Key
-
 
 
 
