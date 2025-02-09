@@ -6,8 +6,6 @@ A bot for getting money automatically in DankMemer Discord Bot
 
 - **8 February 2025**
   - Now checks if Discord is open
-  - Added a button to open Discord
-
     
     ![discord](https://github.com/user-attachments/assets/bb8eb97e-26dd-410d-8ce1-a6b124df1f96)
 
@@ -22,25 +20,29 @@ A bot for getting money automatically in DankMemer Discord Bot
     
 
 - **28 January 2025**
-  - Fixed Streaming command
+  - Fixed Stream command
   - Now uses local time instead of a fixed timer
   - Now user can press command buttons and it will force run the command (the timer won't reset)
 
-- **27 January 2025**
-  - New UI
- 
-    ![new ui](https://github.com/user-attachments/assets/91d95cf3-4053-41e0-80ae-7268b9060aab)
 
+
+# Features
+- [x] Beg command
+- [x] Hunt command
+- [x] Crime command
+- [x] Search command
+- [x] Postmemes command
+- [x] Stream command
+
+### In Development
+- [ ] Automatically buy hunting rifle if it gets broken
+- [ ] Commands tab where you can toggle them, adjust delay and setting a chance of writing it
+
+ 
 
 # Information
-
-### Automatically types these commands:
-- postmemes
-- search
-- crime
-- beg
-- hunt
-- stream
+## How to run
+`pip install -r requirements.txt`
 
 For it to work you always have to be in the discord window.
 
