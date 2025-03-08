@@ -1,14 +1,17 @@
-# Set to True if the stream feature is unlocked. To verify, use the command /stream in Dank Memer
+# Set to True if the stream feature is unlocked. To verify, use the command /stream in Dank Memer.
 stream_unlocked = False
 
-# Enables the option to keep the window on top of other windows
+# Toggles the option to keep the window on top of other windows.
 window_enabled = True
 
-# Activates safe mode to avoid executing potentially harmful commands
+# Doesn't type commands that could get you killed, like /search, to prevent you from losing money
 safe_mode = True
 
-# If commands do not register properly when typed normally (e.g., "/hunt"), increase this value
+# If commands do not register properly when typed normally (e.g., "/hunt"), increase this value.
 load_time = 0.3
 
-# Defines the key used to toggle the bot's activation
+# Key to toggle the bot
 key = "F8"
+
+# Override disabling tips by setting this to True. It is also available to set this in the GUI.
+tips_enabled = None

@@ -7,27 +7,26 @@ import os
 from datetime import datetime
 import requests
 import subprocess
+import webbrowser as browser
 
-
-# region required Imports
+# required Imports
 
 import pyautogui as kp
 import customtkinter as ctk
 import keyboard as kb
+import pyscreeze as ps
+import pygetwindow as gw
+
+
+# -----------------------------------------------------------------------------------------------------------------------------------------------------#
+#                                                                                                                                                      #
+# Write `pip install pyautogui customtkinter keyboard requests pillow opencv-python pygetwindow` in cmd to install libraries if not installed already  #
+#                                                                                                                                                      #
+# -----------------------------------------------------------------------------------------------------------------------------------------------------#
 
 
 
-
-# --------------------------------------------------------------------------------------------------------------------#
-#                                                                                                                     #
-# Write `pip install pyautogui customtkinter keyboard requests` in cmd to install libraries if not installed already  #
-#                                                                                                                     #
-# --------------------------------------------------------------------------------------------------------------------#
-
-
-
-
-path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.py") # get path to config.py
+path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.py")
 
 
 def set_config(variable, value):
@@ -72,7 +71,8 @@ crime_delay = 46
 beg_delay = 42
 hunt_delay = 22
 stream_delay = 1820 # Requires keyboard & mouse
-safe_delay = 32
+
+
 
 def get_time():
     local_time = datetime.now()
@@ -164,7 +164,7 @@ def seconds_to_minutes(seconds):
 
 def update():
     global running, running_text, timer
-    
+
     if running:
         # Running
         if "...." in running_text:
@@ -182,9 +182,9 @@ def update():
             begging_left = beg_delay
         else:
             begging_left = beg_delay - remainder
-        
+
         begging_text = f"Beg: {begging_left}"
-        
+
         beg_btn.configure(text=begging_text)
 
         # Hunting
@@ -194,9 +194,9 @@ def update():
             hunting_left = hunt_delay
         else:
             hunting_left = hunt_delay - remainder
-        
+
         hunting_text = f"Hunt: {hunting_left}"
-        
+
         hunt_btn.configure(text=hunting_text)
 
         # Crime
@@ -206,9 +206,9 @@ def update():
                 crime_left = crime_delay
             else:
                 crime_left = crime_delay - remainder
-            
+
             crime_text = f"Crime: {crime_left}"
-            
+
             crime_btn.configure(text=crime_text)
 
         # Search
@@ -218,9 +218,9 @@ def update():
                 search_left = search_delay
             else:
                 search_left = search_delay - remainder
-            
+
             search_text = f"Search: {search_left}"
-            
+
             search_btn.configure(text=search_text)
 
         # Postmemes
@@ -230,23 +230,23 @@ def update():
             postmemes_left = postmemes_delay
         else:
             postmemes_left = postmemes_delay - remainder
-        
+
         postmemes_text = f"Postmemes: {postmemes_left}"
-        
+
         postmemes_btn.configure(text=postmemes_text)
 
         # Stream
-        
+
         if config.stream_unlocked:
             remainder = timer % stream_delay
             if remainder == 0:
                 stream_left = stream_delay
             else:
                 stream_left = stream_delay - remainder
-            
+
             stream_left_last = seconds_to_minutes(stream_left)
             stream_text = f"Stream: {stream_left_last}"
-            
+
             stream_btn.configure(text=stream_text)
 
 
@@ -268,7 +268,7 @@ def run(target_function, *args, **kwargs):
 
 
 
-def beg():   
+def beg():
     global command
     if command:
         return
@@ -277,7 +277,7 @@ def beg():
 
     pos = kp.position()
     kp.mouseUp()
-    kp.leftClick(460, 1040)
+    kp.leftClick(420, 1040)
     kp.moveTo(pos)
 
     kp.typewrite("/beg")
@@ -289,7 +289,7 @@ def beg():
 
 
 def hunt():
-    
+
     global command
     if command:
         return
@@ -298,7 +298,7 @@ def hunt():
 
     pos = kp.position()
     kp.mouseUp()
-    kp.leftClick(460, 1040)
+    kp.leftClick(420, 1040)
     kp.moveTo(pos)
 
     kp.typewrite("/hunt")
@@ -307,6 +307,8 @@ def hunt():
     kp.press('enter')
 
     command = False
+
+    rifle_thread.start()
 
 
 def crime():
@@ -321,7 +323,7 @@ def crime():
 
     pos = kp.position()
     kp.mouseUp()
-    kp.leftClick(460, 1040)
+    kp.leftClick(420, 1040)
     kp.moveTo(pos)
 
     kp.typewrite("/crime")
@@ -333,7 +335,7 @@ def crime():
 
     pos = kp.position()
 
-    kp.leftClick(460, 990)
+    kp.leftClick(420, 970)
 
     kp.moveTo(pos)
 
@@ -344,7 +346,7 @@ def crime():
 def search():
     if config.safe_mode:
         return
-    
+
     global command
     if command:
         return
@@ -353,7 +355,7 @@ def search():
 
     pos = kp.position()
     kp.mouseUp()
-    kp.leftClick(460, 1040)
+    kp.leftClick(420, 1040)
     kp.moveTo(pos)
 
     kp.typewrite("/search")
@@ -365,7 +367,7 @@ def search():
 
     pos = kp.position()
 
-    kp.leftClick(460, 990)
+    kp.leftClick(420, 970)
 
     kp.moveTo(pos)
 
@@ -382,7 +384,7 @@ def postmemes():
 
     pos = kp.position()
     kp.mouseUp()
-    kp.leftClick(460, 1040)
+    kp.leftClick(420, 1040)
     kp.moveTo(pos)
 
     kp.typewrite("/postmemes")
@@ -396,24 +398,24 @@ def postmemes():
 
     # type
 
-    kp.leftClick(460, 950)
+    kp.leftClick(420, 930)
 
-    ys = [900, 870, 830, 790, 760]
+    ys = [880, 850, 810, 760, 730]
     y = random.choice(ys)
 
-    kp.leftClick(460, y)
+    kp.leftClick(420, y)
 
     t.sleep(1)
     # platform
-    kp.leftClick(460, 900)
+    kp.leftClick(420, 880)
 
-    ys = [850, 800, 730, 700, 650]
+    ys = [830, 775, 720, 660, 605]
     y = random.choice(ys)
-    kp.leftClick(460, y)
+    kp.leftClick(420, y)
 
     t.sleep(1)
 
-    kp.leftClick(460, 990)
+    kp.leftClick(420, 970)
 
     kp.moveTo(pos)
 
@@ -424,6 +426,9 @@ def postmemes():
 
 
 def stream():
+    if not config.stream_unlocked:
+        return
+
     global command
     if command:
         return
@@ -432,7 +437,7 @@ def stream():
 
     pos = kp.position()
     kp.mouseUp()
-    kp.leftClick(460, 1040)
+    kp.leftClick(420, 1040)
     kp.moveTo(pos)
 
     kp.typewrite("/stream")
@@ -445,27 +450,27 @@ def stream():
     pos = kp.position()
 
 
-    ys =  [ 990, # main
-            945, # select game
-            910, # game 1
-            875, # game 2
-            830, # game 3
-            800, # game 4
-            760, # game 5
+    ys =  [ 970, # main
+            925, # select game
+            810, # game 1
+            855, # game 2
+            810, # game 3
+            780, # game 4
+            740, # game 5
         ]
 
 
-    kp.leftClick(460, ys[0])
+    kp.leftClick(420, ys[0])
 
     t.sleep(1)
-    kp.leftClick(460, ys[1])
+    kp.leftClick(420, ys[1])
 
     t.sleep(config.load_time)
     game = random.randint(2, 6)
-    kp.leftClick(460, ys[game])
+    kp.leftClick(420, ys[game])
 
     t.sleep(1)
-    kp.leftClick(460, ys[0])
+    kp.leftClick(420, ys[0])
 
     t.sleep(1)
     kp.moveTo(pos)
@@ -484,7 +489,6 @@ def start_thread():
 
 
 # region GUI
-
 app = ctk.CTk()
 app.title("Dank Memer Bot")
 app.geometry("800x400+460+100")
@@ -687,7 +691,7 @@ config_frame.grid_columnconfigure(0, weight=1)
 config_text_box = ctk.CTkTextbox(config_frame, width=550)
 config_text_box.grid(row=3, column=0, columnspan=3, padx=10, pady=10)
 
-config_text_box.insert("0.0", 
+config_text_box.insert("0.0",
 """
                                                                             Stream unlocked
 Set to True if the stream feature is unlocked. To verify, use the command /stream
@@ -787,7 +791,7 @@ def webhook(value):
             result.raise_for_status()
         except requests.exceptions.HTTPError as err:
             print(err)
-        else: 
+        else:
             # print(f"Payload delivered successfully, code {result.status_code}.")
             contact_entry.delete(0, ctk.END)
             help_frame.focus_set()
@@ -856,9 +860,8 @@ def open_discord():
 
 
 
-start_btn = ctk.CTkButton(discord_frame, text="Open Discord", font=ctk.CTkFont(size=15), command=open_discord)
-start_btn.grid(row=2, column=0, padx=10, pady=20)
-
+open_btn = ctk.CTkButton(discord_frame, text="Open Discord", font=ctk.CTkFont(size=15), command=open_discord)
+open_btn.grid(row=2, column=0, padx=10, pady=20)
 
 
 
@@ -866,7 +869,6 @@ start_btn.grid(row=2, column=0, padx=10, pady=20)
 # region GUI Functions
 
 def switch_help_tab(tab_name):
-    # Hide all tabs
     for widget in content_frame.winfo_children():
         widget.grid_forget()
 
@@ -879,7 +881,6 @@ def switch_help_tab(tab_name):
 
 
 def switch_tab(tab_name):
-    # Hide all tabs
     for widget in content_frame.winfo_children():
         widget.grid_forget()
 
@@ -897,6 +898,54 @@ def switch_tab(tab_name):
 
 
 switch_tab("main")
+
+
+def buy_rifle():
+    global command
+    command = True
+
+    pos = kp.position()
+
+    kp.typewrite("/shop view")
+    t.sleep(config.load_time)
+    kp.press('enter')
+    kp.press('enter')
+    t.sleep(5)
+    kp.leftClick(520, 880)
+    t.sleep(1)
+    kp.leftClick(1115, 645)
+
+    kp.moveTo(pos)
+
+
+
+def check_for_image(image, confidence=0.4, minSearchTime=0, region=(306, 856, 792, 983)):
+    try:
+        return ps.locateOnScreen(image, confidence=confidence, minSearchTime=minSearchTime, region=region) is not None
+    except Exception as e:
+        # print(f"Error: {e}")
+        return False
+
+
+def rifle_check():
+    if check_for_image("resources/rifle.png", minSearchTime=5):
+        rifle_broken = True
+    else:
+        rifle_broken = False
+        
+        t.sleep(0.01)
+    
+    rifle_available = not rifle_broken
+    if not rifle_available:
+        run(buy_rifle)
+
+
+
+
+
+
+rifle_thread = threading.Thread(target=rifle_check, daemon=True)
+
 
 
 
@@ -988,15 +1037,54 @@ def toggle_stream():
 
 
 
-
 def toggle_safe():
     set_config("safe_mode", not config.safe_mode)
     importlib.reload(config)
     set_safe()
 
 
+def set_tips():
+    if config.tips_enabled is None:
+        browser.open("https://dankmemer.lol/dashboard/settings", 2)
+        t.sleep(3)
+        pos = kp.position()
+        kp.leftClick(1080, 810)
+        t.sleep(1)
+
+        if check_for_image("resources/tip_on.png", confidence=0.8, region=(1800, 920, 60, 40)):
+            kp.leftClick(1830, 940)
+        
+        set_config("tips_enabled", False)
+        
+        kp.moveTo(pos)
+
+
+        windows = gw.getAllWindows()
+        
+        for window in windows:
+            if "Dank Memer" in window.title and not "Visual" in window.title and not "main.py" in window.title and not "\\" in window.title and not "Discord" in window.title and not window.title == "Dank Memer":
+
+                kp.hotkey("ctrl", "w")
+                window.minimize()
+                break
+
+        
+
+
+
+
+def toggle_tips():
+    set_config("tips_enabled", not config.tips_enabled)
+    importlib.reload(config)
+    run(set_tips)
+
+
+
 def set_safe():
     if config.safe_mode:
+        search_btn.configure(text="Search")
+        crime_btn.configure(text="Crime")
+        
         search_btn.configure(state="disabled")
         crime_btn.configure(state="disabled")
     else:
@@ -1016,7 +1104,7 @@ bind_key(config.key)
 
 
 def change_key():
-    key_btn.configure(text="Press a key...")  
+    key_btn.configure(text="Press a key...")
 
     def capture_key():
         ehh_key = kb.read_key()
@@ -1040,6 +1128,10 @@ stream_check.grid(row=0, column=1, padx=10, pady=20)
 
 safe_check = ctk.CTkCheckBox(settings_frame, text="Safe Mode", command=toggle_safe)
 safe_check.grid(row=0, column=2, padx=10, pady=20)
+stream_check.grid(row=0, column=1, padx=10, pady=20)
+
+tips_check = ctk.CTkCheckBox(settings_frame, text="Tips enabled", command=toggle_tips)
+tips_check.grid(row=1, column=2, padx=10, pady=0)
 
 
 
@@ -1061,6 +1153,13 @@ def set_checks():
         safe_check.select()
     else:
         safe_check.deselect()
+        topwin_check.deselect()
+
+
+    if config.tips_enabled:
+        tips_check.select()
+    else:
+        tips_check.deselect()
 
 
 
@@ -1074,7 +1173,7 @@ def set_time(value):
 
 
 time_sl = ctk.CTkSlider(settings_frame, width=150, from_=0.1, to=3,command=set_time)
-time_sl.grid(row=2, column=0, padx=10, pady=0)
+time_sl.grid(row=2, column=0, padx=10, pady=0, sticky="n")
 time_sl.set(config.load_time)
 
 
@@ -1084,6 +1183,8 @@ set_checks()
 set_window()
 set_safe()
 set_stream()
+
+set_tips()
 
 
 # region help
