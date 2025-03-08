@@ -1,5 +1,0 @@
-opencv-python
-pyautogui
-customtkinter
-keyboard
-requests
