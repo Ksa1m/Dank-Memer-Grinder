@@ -1,8 +1,17 @@
-# DankMemer Self Bot
+# Dank Memer Self Bot
 A bot for getting money automatically in DankMemer Discord Bot
 
 
 ## What's new
+
+- **8 March 2025**
+  - Added automatically buying hunting rifle when it gets broken
+  - Added Automatic tips disabler
+  - Fixed text on start button not changing
+  - Fixed disabled text with safe mode
+  - Requirements and pictures are now in resources folder
+
+
 
 - **8 February 2025**
   - Now checks if Discord is open
@@ -33,25 +42,21 @@ A bot for getting money automatically in DankMemer Discord Bot
 - [x] Search command
 - [x] Postmemes command
 - [x] Stream command
+- [x] Automatically buy hunting rifle if it gets broken
+- [x] Check for tips
 
 ### In Development
-- [ ] Automatically buy hunting rifle if it gets broken
-- [ ] Commands tab where you can toggle them, adjust delay and setting a chance of writing it
-- [ ] Check for tips
+- [ ] Withdraw money if you don't have enough to buy hunting rifle
+- [ ] Commands tab where you can toggle commands, adjust delay and setting a chance of writing it
+- [ ] Change color of the current category so you can know what category is currently selected
+- [ ] Automatically install requirements
 
- 
 
 # Information
 ## How to run
 `pip install -r requirements.txt`
 
 For it to work you always have to be in the discord window.
-
-- Tips can break commands with mouse clicks, so I recommend disabling them in Dank memer settings 
-https://dankmemer.lol/dashboard/settings
-
-  ![settings](https://github.com/user-attachments/assets/0d87b4b5-d11c-4450-b14b-bc7d1f6f2dd8)
-
 
 ## Config
 
@@ -71,6 +76,8 @@ https://dankmemer.lol/dashboard/settings
 - Key to toggle the bot
   - Key
 
+- Override disabling tips by setting this to True. It is also available to set this in the GUI.
+  - Tips enabled
 
 
 
