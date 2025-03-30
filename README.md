@@ -1,10 +1,11 @@
-# Dank Memer Self Bot
-A bot for getting money automatically in DankMemer Discord Bot
+# Dank Memer Grinder
+A bot for getting money automatically in Dank Memer Discord Bot
 
 
 ## What's new
 
 - **8 March 2025**
+  - Added Automatically closing/opening discord window. Now you don't have to always keep discord opened
   - Added automatically buying hunting rifle when it gets broken
   - Added Automatic tips disabler
   - Fixed text on start button not changing
@@ -43,7 +44,7 @@ A bot for getting money automatically in DankMemer Discord Bot
 - [x] Postmemes command
 - [x] Stream command
 - [x] Automatically buy hunting rifle if it gets broken
-- [x] Check for tips
+- [x] Automatically disable tips
 
 ### In Development
 - [ ] Withdraw money if you don't have enough to buy hunting rifle
@@ -55,8 +56,6 @@ A bot for getting money automatically in DankMemer Discord Bot
 # Information
 ## How to run
 `pip install -r requirements.txt`
-
-For it to work you always have to be in the discord window.
 
 ## Config
 
@@ -101,11 +100,5 @@ Help Menu
 
 
 ![Preview Help](https://github.com/user-attachments/assets/9b21c386-7709-4673-9c63-a425f01d2e6f)
-
-
-
-
-<br>
-
 
 
